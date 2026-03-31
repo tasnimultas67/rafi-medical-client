@@ -109,22 +109,19 @@ const DoctorCard = ({ doctor, onViewDetails, onFavorite, isFavorite }) => {
             </span>
           </div>
         </div>
-
-        {/* Doctor Name Overlay */}
-        <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
-          <h3 className="text-2xl font-bold text-white mb-1 drop-shadow-lg">
-            Dr. {doctor.name}
-          </h3>
-          <p className="text-blue-100 font-medium drop-shadow">
-            {doctor.specialization}
-          </p>
-        </div>
       </div>
 
       {/* Content Section */}
-      <div className="p-6">
+      <div className="p-4">
+        {/* Doctor Name Overlay */}
+        <div className="">
+          <h3 className="text-xl font-bold text-black">{doctor.name}</h3>
+          <p className="text-neutral-700 font-medium text-sm">
+            {doctor.specialization}
+          </p>
+        </div>
         {/* Qualifications */}
-        <div className="flex items-center gap-2 mb-4 pb-3 border-b border-gray-100">
+        <div className="flex items-center gap-2 my-2  pb-3 border-b border-gray-100">
           <Award className="w-4 h-4 text-blue-500 flex-shrink-0" />
           <span className="text-sm text-gray-600 font-medium line-clamp-1">
             {doctor.degree || "Medical Degree"}
@@ -132,7 +129,7 @@ const DoctorCard = ({ doctor, onViewDetails, onFavorite, isFavorite }) => {
         </div>
 
         {/* Experience & Fee */}
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex justify-between items-center mb-2">
           <div className="flex items-center gap-2">
             <Activity className="w-4 h-4 text-gray-400 flex-shrink-0" />
             <span className="text-sm text-gray-600">
@@ -146,7 +143,7 @@ const DoctorCard = ({ doctor, onViewDetails, onFavorite, isFavorite }) => {
         </div>
 
         {/* Schedule */}
-        <div className="flex items-start justify-between mb-4">
+        <div className="flex items-start justify-between mb-2">
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <Calendar className="w-4 h-4 text-gray-400 flex-shrink-0" />
             <span className="line-clamp-1">

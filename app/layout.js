@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono, Inter } from "next/font/google";
+import { Geist, Geist_Mono, Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import Header from "./shared-components/Header";
 import Footer from "./shared-components/Footer";
@@ -14,10 +14,10 @@ const geistMono = Geist_Mono({
 });
 
 // Configure the font
-const inter = Inter({
+const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-inter", // Optional: for using with Tailwind CSS
+  variable: "--font-plus-jakarta-sans", // Optional: for using with Tailwind CSS
 });
 
 export const metadata = {
@@ -29,9 +29,9 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${plusJakartaSans.variable} h-full antialiased`}
     >
-      <body className={`min-h-full flex flex-col ${inter.className}`}>
+      <body className={`min-h-full flex flex-col ${plusJakartaSans.className}`}>
         <Header />
         {children}
         <Footer />

@@ -69,7 +69,7 @@ export default function HomeHero() {
             </div>
 
             {/* Main Heading */}
-            <h1 className="text-5xl lg:text-7xl font-bold text-white leading-tight animate-fade-in-up animation-delay-200">
+            <h1 className="text-5xl lg:text-7xl font-bold text-white leading-tight tracking-tight animate-fade-in-up animation-delay-200">
               Your Health,
               <br />
               <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
