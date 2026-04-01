@@ -2,10 +2,12 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, Phone, Clock, MapPin } from "lucide-react";
+import { Menu, X, Phone, Clock, MapPin, ChevronDown } from "lucide-react";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isPagesDropdownOpen, setIsPagesDropdownOpen] = useState(false);
+  const [isMobilePagesOpen, setIsMobilePagesOpen] = useState(false);
   const pathname = usePathname();
 
   const navigation = [
@@ -16,12 +18,36 @@ const Header = () => {
     { name: "Contact", href: "/contact-us" },
   ];
 
+  const pagesDropdown = [
+    { name: "Login", href: "/login" },
+    { name: "Dashboard", href: "/dashboard" },
+    { name: "Gallery", href: "/gallery" },
+    { name: "FAQs", href: "/faqs" },
+  ];
+
   // Helper function to check if link is active
   const isActive = (href) => {
     if (href === "/") {
       return pathname === href;
     }
     return pathname.startsWith(href);
+  };
+
+  // Helper function to check if any dropdown item is active
+  const isDropdownActive = () => {
+    return pagesDropdown.some((item) => pathname.startsWith(item.href));
+  };
+
+  // Close all menus
+  const closeAllMenus = () => {
+    setIsOpen(false);
+    setIsPagesDropdownOpen(false);
+    setIsMobilePagesOpen(false);
+  };
+
+  // Handle link click
+  const handleLinkClick = () => {
+    closeAllMenus();
   };
 
   return (
@@ -47,7 +73,11 @@ const Header = () => {
       {/* Main Navigation */}
       <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
         {/* Logo */}
-        <Link href="/" className="flex items-center space-x-2">
+        <Link
+          href="/"
+          className="flex items-center space-x-2"
+          onClick={handleLinkClick}
+        >
           <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-4xl">+</span>
           </div>
@@ -62,6 +92,7 @@ const Header = () => {
             <Link
               key={item.name}
               href={item.href}
+              onClick={handleLinkClick}
               className={`font-medium transition-colors ${
                 isActive(item.href)
                   ? "text-blue-600"
@@ -71,8 +102,55 @@ const Header = () => {
               {item.name}
             </Link>
           ))}
+
+          {/* Pages Dropdown - Desktop */}
+          <div className="relative">
+            <button
+              onClick={() => setIsPagesDropdownOpen(!isPagesDropdownOpen)}
+              onMouseEnter={() => setIsPagesDropdownOpen(true)}
+              onMouseLeave={() => setIsPagesDropdownOpen(false)}
+              className={`font-medium transition-colors flex items-center gap-1 ${
+                isDropdownActive()
+                  ? "text-blue-600"
+                  : "text-slate-600 hover:text-blue-600"
+              }`}
+            >
+              Pages
+              <ChevronDown
+                size={16}
+                className={`transition-transform duration-200 ${
+                  isPagesDropdownOpen ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            {isPagesDropdownOpen && (
+              <div
+                className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-slate-100 py-2 z-50"
+                onMouseEnter={() => setIsPagesDropdownOpen(true)}
+                onMouseLeave={() => setIsPagesDropdownOpen(false)}
+              >
+                {pagesDropdown.map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    onClick={handleLinkClick}
+                    className={`block px-4 py-2 text-sm transition-colors ${
+                      isActive(item.href)
+                        ? "text-blue-600 bg-blue-50"
+                        : "text-slate-700 hover:bg-slate-50 hover:text-blue-600"
+                    }`}
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+
           <Link
             href="/appointment"
+            onClick={handleLinkClick}
             className="bg-blue-600 text-white px-6 py-2.5 rounded-full font-semibold hover:bg-blue-700 transition-all shadow-md hover:shadow-lg"
           >
             Book Appointment
@@ -92,7 +170,7 @@ const Header = () => {
 
       {/* Mobile Menu Overlay */}
       {isOpen && (
-        <div className="md:hidden bg-white border-t border-slate-100 px-6 py-4 space-y-4">
+        <div className="md:hidden bg-white border-t border-slate-100 px-6 py-4 space-y-4 max-h-[calc(100vh-80px)] overflow-y-auto">
           {navigation.map((item) => (
             <Link
               key={item.name}
@@ -102,15 +180,55 @@ const Header = () => {
                   ? "text-blue-600 font-semibold"
                   : "text-slate-700 hover:text-blue-600"
               }`}
-              onClick={() => setIsOpen(false)}
+              onClick={handleLinkClick}
             >
               {item.name}
             </Link>
           ))}
+
+          {/* Pages Dropdown - Mobile */}
+          <div className="border-t border-slate-100 pt-2">
+            <button
+              onClick={() => setIsMobilePagesOpen(!isMobilePagesOpen)}
+              className={`w-full flex items-center justify-between text-lg ${
+                isDropdownActive()
+                  ? "text-blue-600 font-semibold"
+                  : "text-slate-700 hover:text-blue-600"
+              }`}
+            >
+              Pages
+              <ChevronDown
+                size={20}
+                className={`transition-transform duration-200 ${
+                  isMobilePagesOpen ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            {isMobilePagesOpen && (
+              <div className="mt-2 ml-4 space-y-3 border-l-2 border-blue-200 pl-4">
+                {pagesDropdown.map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={`block py-1 text-base ${
+                      isActive(item.href)
+                        ? "text-blue-600 font-medium"
+                        : "text-slate-600 hover:text-blue-600"
+                    }`}
+                    onClick={handleLinkClick}
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+
           <Link
             href="/appointment"
             className="block text-center bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold"
-            onClick={() => setIsOpen(false)}
+            onClick={handleLinkClick}
           >
             Book Appointment
           </Link>

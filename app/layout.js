@@ -2,6 +2,7 @@ import { Geist, Geist_Mono, Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import Header from "./shared-components/Header";
 import Footer from "./shared-components/Footer";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,7 +34,7 @@ export default function RootLayout({ children }) {
     >
       <body className={`min-h-full flex flex-col ${plusJakartaSans.className}`}>
         <Header />
-        {children}
+        <TooltipProvider>{children}</TooltipProvider>
         <Footer />
       </body>
     </html>

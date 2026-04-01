@@ -23,13 +23,34 @@ import {
   ChevronLeft,
   Play,
   Mail,
+  User,
 } from "lucide-react";
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
 import HomeHero from "./shared-components/HomeHero";
+import DoctorCard2 from "./shared-components/DoctorCard2";
 
 export default function HomePage() {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [isVisible, setIsVisible] = useState({});
+  const [doctors, setDoctors] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch doctors data
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const response = await fetch("/data/doctors.json");
+        const data = await response.json();
+        // Get first 3 doctors for homepage
+        setDoctors(data.doctors.slice(0, 3));
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching doctors:", error);
+        setLoading(false);
+      }
+    };
+    fetchDoctors();
+  }, []);
 
   // Statistics data
   const stats = [
@@ -270,6 +291,52 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Featured Doctors Section */}
+      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-blue-100 rounded-full px-4 py-2 mb-4">
+              <Stethoscope className="w-4 h-4 text-blue-600" />
+              <span className="text-sm font-semibold text-blue-600">
+                Expert Medical Team
+              </span>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+              Meet Our Expert Doctors
+            </h2>
+            <div className="w-24 h-1 bg-blue-500 mx-auto mb-6"></div>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Our team of highly qualified and experienced medical professionals
+              is dedicated to providing exceptional healthcare services
+            </p>
+          </div>
+
+          {loading ? (
+            <div className="flex justify-center items-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent"></div>
+            </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
+                {doctors.map((doctor, index) => (
+                  <DoctorCard2 key={doctor.id} doctor={doctor} index={index} />
+                ))}
+              </div>
+
+              <div className="text-center">
+                <Link
+                  href="/doctors"
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold px-8 py-3 rounded-lg transition-all transform shadow-lg"
+                >
+                  View All Doctors
+                  <ArrowRight className="w-5 h-5" />
+                </Link>
+              </div>
+            </>
+          )}
+        </div>
+      </section>
+
       {/* Why Choose Us Section */}
       <section className="py-20 bg-gradient-to-br from-blue-50 to-blue-100">
         <div className="container mx-auto px-4">
@@ -427,7 +494,11 @@ export default function HomePage() {
                   >
                     <span className="font-semibold">{item.day}</span>
                     <span
-                      className={`${item.special ? "text-red-300 font-bold" : "text-blue-200"}`}
+                      className={`${
+                        item.special
+                          ? "text-red-300 font-bold"
+                          : "text-blue-200"
+                      }`}
                     >
                       {item.hours}
                     </span>
